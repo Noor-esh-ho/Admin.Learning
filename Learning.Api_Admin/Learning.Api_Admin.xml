@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Learning.Api_Admin</name>
+    </assembly>
+    <members>
+        <member name="M:Learning.Api_Admin.Controllers.AttributeController.getAttributeByUpdate(System.Object)">
+            <summary>
+            属性编辑
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.BaseController.GetCookies(System.String)">
+            <summary>
+            获取cookies
+            </summary>
+            <param name="key">键</param>
+            <returns>返回对应的值</returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.BaseController.SetCookies(System.String,System.String,System.Int32)">
+            <summary>
+            设置本地cookie
+            </summary>
+            <param name="key">键</param>
+            <param name="value">值</param>  
+            <param name="minutes">过期时长，单位：分钟</param>      
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.BaseController.DeleteCookies(System.String)">
+            <summary>
+            删除指定的cookie
+            </summary>
+            <param name="key">键</param>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.BaseController.GetIp">
+            <summary>
+            获取IP
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.ExamController.GetArranges">
+            <summary>
+            考试模块
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.RightController.getRightByUid(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="uid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserBylogin(Learning.Api_Admin.Models.Users)">
+            <summary>
+            登录
+            </summary>
+            <param name="users"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByInfo(System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByAdd(Learning.Infrastructure.Dto.Base.user)">
+            <summary>
+            新增单个用户
+            </summary>
+            <param name="user">数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByUpdate(Learning.Infrastructure.Dto.Base.user)">
+            <summary>
+            修改
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserResetPassword(System.Object)">
+            <summary>
+            密码重置
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByRemove(System.Object)">
+            <summary>
+            删除
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByUpdateBase(System.Object)">
+            <summary>
+            修改个人信息
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.getUserByUpdatePassword(System.Object)">
+            <summary>
+            修改密码
+            </summary>
+            <param name="data">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:Learning.Api_Admin.Controllers.UserController.Upload(Microsoft.AspNetCore.Http.IFormCollection)">
+            <summary>
+            上传头像
+            </summary>
+            <param name="Files"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
