@@ -140,17 +140,17 @@ namespace Learning.Service
         /// <returns></returns>
         public object getRightByUid(string uid)
         {
-            List<object> menuAll = new List<object>();
-            var desc = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid==null&&d.Rstate == 1 && d.RisDel == 0).ToList();
-            desc.ForEach(d =>
-            {
-                menuAll.Add(new
-                {
-                    id = d.Rid,
-                    name = d.Rname,
-                    children = GetIsRightsByAllChildren(d.Rid)
-                });
-            });
+            //List<object> menuAll = new List<object>();
+            //var desc = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid==null&&d.Rstate == 1 && d.RisDel == 0).ToList();
+            //desc.ForEach(d =>
+            //{
+            //    menuAll.Add(new
+            //    {
+            //        id = d.Rid,
+            //        name = d.Rname,
+            //        children = GetIsRightsByAllChildren(d.Rid)
+            //    });
+            //});
             //根据用户ID获取所有的权限
             var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();
             //获取拥有的一级权限
@@ -169,13 +169,11 @@ namespace Learning.Service
                 };
                 dataList.Add(treeData);
             });
-            return GetResult(Actions.query,0,data:new {
-                dataList,
-                menuAll
-            });
+            return GetResult(Actions.query,0,data: dataList);
         }
         public List<TreeData> GetRIghtsByUidOnAll(string rid, string uid) {
-            var iq = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid.Contains(rid)&&d.RightsRelations.FirstOrDefault().Rruid.Contains(uid)).ToList();
+            var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();
+            var iq = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid.Contains(rid)&&RRRID.Contains(d.Rid)).Include(d=>d.RightsRelations).ToList();
             List<TreeData> treeDatas = new List<TreeData>();
             iq.ForEach(d =>
             {

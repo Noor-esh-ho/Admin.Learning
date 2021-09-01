@@ -15,5 +15,7 @@ namespace Learning.Service.Interface
         object getOrganizationByAll();
         object getOrganizationByAdd(dept data);
         object getOrganizationRelationByAdd(string[] arrid, string oid);
+        object getOrganizationTreeUser(out int total, int page, int limit, string name, string account, string oid, string jobid);
+        object getOrganizationDeletebase(string[] arruid, string oid);
     }
 }

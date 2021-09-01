@@ -70,9 +70,7 @@ namespace Learning.Service
                     number = d.Ono,
                     parentId = d.OparentOid,
                     principal = d.Oprincipal,
-                    owner = d.OrganizationRelations.Select(s => s.Oruid).ToList(),
                     staff=d.OrganizationRelations.Count(),
-                    selected=d.OrganizationRelations.Select(a=>a.Oruid).ToList(),
                     state = d.Ostate,
                     remark = d.Odesc,
                     children = getOrganizationByListBase(d.Oid)
@@ -151,6 +149,36 @@ namespace Learning.Service
             _organizationICO._baseOrganizationRelationService.AddRange(data);
             _organizationICO._baseOrganizationRelationService.SaveChanges();
             return GetResult( Actions.add,0);
+        }
+
+        public object getOrganizationTreeUser(out int total, int page, int limit, string name, string account, string oid, string jobid)
+        {
+            total = 0;
+            var iq = _organizationICO._baseOrganizationRelationService.QueryAll(d => d.OrcreateTime, true, out total, page, limit, d => d.Oroid.Contains(oid)&&(d.Oru.Uname.Contains(name)&&d.Oru.Uaccount.Contains(account))).Include(d=>d.Oru).ToList();
+            List<object> list = new List<object>();
+            foreach (var et in iq)
+            {
+                list.Add(new {
+                    id=et.Oru.Uid,
+                    name=et.Oru.Uname,
+                    account=et.Oru.Uaccount,
+                    principal=et.OrisPrincipal==1?"是":"否",
+                    state=et.Oru.Ustate==1? "正常":"异常",
+                    business="",
+                });
+            }
+            return GetResult(Actions.query,0,data:new{ 
+                list,
+                total
+            });
+        }
+
+        public object getOrganizationDeletebase(string[] arruid, string oid)
+        {
+            var iq = _organizationICO._baseOrganizationRelationService.QueryAll(d=>d.Oroid.Contains(oid)&&arruid.Contains(d.Oruid)).ToList();
+            _organizationICO._baseOrganizationRelationService.RemoveRange(iq);
+            _organizationICO._baseOrganizationRelationService.SaveChanges();
+            return GetResult(Actions.update,0);
         }
     }
 }
