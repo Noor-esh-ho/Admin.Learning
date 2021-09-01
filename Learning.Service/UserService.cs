@@ -356,15 +356,13 @@ namespace Learning.Service
 
         public object getUserResetPassword(string[] arrid, string password)
         {
-            List<User> list = new List<User>();
             password = EncryptUtil.LoginMd5(password, _Configuration["Admin:default"]);
             foreach (var item in arrid)
             {
                 var iq = _userIOC._baseuserService.QueryAll(d => d.Uid.Contains(item)).FirstOrDefault();
                 iq.Upassword = password;
-                list.Add(iq);
+                _userIOC._baseuserService.Update(iq);
             }
-            _userIOC._baseuserService.UpdateRange(list);
             _userIOC._baseuserService.SaveChanges();
             return GetResult(Actions.update, 0);
         }
