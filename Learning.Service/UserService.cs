@@ -35,6 +35,7 @@ namespace Learning.Service
 
             try
             {
+
                 var uid = us.uid == "" ? Config.GUID() : us.uid;
                 var password = EncryptUtil.LoginMd5(us.password, _Configuration["Admin:default"]);
                 User user = new User()
@@ -93,33 +94,28 @@ namespace Learning.Service
             total = 0;
             if (parentId != "")
             {
-                List<user> dataList = new List<user>();
                 var Oruid = _userIOC._baseOrganizationRelationService.QueryAll(d => d.Oroid.Contains(parentId)).Select(d => d.Oruid).ToList();
-                var iq = _userIOC._baseuserService.QueryAll(d => d.UcreateTime, true, out total, page, limit, d => Oruid.Contains(d.Uid) && (d.Uname.Contains(name) && d.Uaccount.Contains(account)) && (d.Ustate == 1 && d.UisDel == 0)).Include(r => r.OrganizationRelations).Include(r => r.UserInfos).ToList();
-                iq.ForEach(d =>
-                {
-                    dataList.Add(new user
-                    {
-                        uid = d.Uid,
-                        account = d.Uaccount,
-                        password = d.Upassword,
-                        oNpassword = d.Upassword,
-                        nickname = d.UserInfos.FirstOrDefault().Uinick,
-                        name = d.Uname,
-                        phone = d.UserInfos.FirstOrDefault().Uiphone,
-                        email = d.UserInfos.FirstOrDefault().Uimail,
-                        gender = d.UserInfos.FirstOrDefault().Uigender == "男" ? 0 : (d.UserInfos.FirstOrDefault().Uigender == "女" ? 1 : 3),
-                        birthday = d.UserInfos.FirstOrDefault().Uibirthday.ToString(),
-                        role = d.UroleAid,
-                        position = d.UdesignationAid,
-                        iclass = d.Ucid,
-                        state = d.Ustate == 1 ? "正常" : "禁用",
-                    });
+                var iq = _userIOC._baseUserInfoService.QueryAll(d => d.UicreateTime, true, out total, page, limit, d => Oruid.Contains(d.Uiuid) && (d.Uiu.Uname.Contains(name) && d.Uiu.Uaccount.Contains(account)) && (d.Uistate == 1 && d.UiisDel == 0)).Include(d => d.Uiu).Select(d => new {
+                    uid = d.Uiu.Uid,
+                    account = d.Uiu.Uaccount,
+                    password = d.Uiu.Upassword,
+                    oNpassword = d.Uiu.Upassword,
+                    nickname = d.Uinick,
+                    name = d.Uiu.Uname,
+                    phone = d.Uiphone,
+                    email = d.Uimail,
+                    gender = d.Uigender == "男" ? 0 : (d.Uigender == "女" ? 1 : 3),
+                    birthday = d.Uibirthday.ToString(),
+                    role = d.Uiu.UroleAid,
+                    roleName = d.Uiu.Attributes.FirstOrDefault().Aname,
+                    position = d.Uiu.UdesignationAid,
+                    iclass = d.Uiu.Ucid,
+                    state = d.Uiu.Ustate == 1 ? "正常" : "禁用",
 
-                });
+                }).ToList();
                 object data = new
                 {
-                    dataList,
+                    dataList = iq,
                     count = total
                 };
                 return GetResult(Actions.query, 0, data: data);
@@ -127,31 +123,26 @@ namespace Learning.Service
             }
             else
             {
-                List<user> dataList = new List<user>();
-                var iq = _userIOC._baseuserService.QueryAll(d => d.UcreateTime, true, out total, page, limit, d => d.Uname.Contains(name) && d.Uaccount.Contains(account) && (d.Ustate == 1 && d.UisDel == 0)).Include(d => d.UserInfos).ToList();
-                iq.ForEach(d =>
-                {
-                    dataList.Add(new user
-                    {
-                        uid = d.Uid,
-                        account = d.Uaccount,
-                        password = d.Upassword,
-                        oNpassword = d.Upassword,
-                        nickname = d.UserInfos.FirstOrDefault().Uinick,
-                        name = d.Uname,
-                        phone = d.UserInfos.FirstOrDefault().Uiphone,
-                        email = d.UserInfos.FirstOrDefault().Uimail,
-                        gender = d.UserInfos.FirstOrDefault().Uigender == "男" ? 0 : (d.UserInfos.FirstOrDefault().Uigender == "女" ? 1 : 3),
-                        birthday = d.UserInfos.FirstOrDefault().Uibirthday.ToString(),
-                        role = d.UroleAid,
-                        position = d.UdesignationAid,
-                        iclass = d.Ucid,
-                        state = d.Ustate == 1 ? "正常" : "禁用",
-                    });
-                });
+                var iq = _userIOC._baseUserInfoService.QueryAll(d => d.UicreateTime, true, out total, page, limit, d => d.Uiu.Uname.Contains(name) && d.Uiu.Uaccount.Contains(account) && (d.Uiu.Ustate == 1 && d.Uiu.UisDel == 0)).Include(d => d.Uiu).Select(d => new {
+                    uid = d.Uiu.Uid,
+                    account = d.Uiu.Uaccount,
+                    password = d.Uiu.Upassword,
+                    oNpassword = d.Uiu.Upassword,
+                    nickname = d.Uinick,
+                    name = d.Uiu.Uname,
+                    phone = d.Uiphone,
+                    email = d.Uimail,
+                    gender = d.Uigender == "男" ? 0 : (d.Uigender == "女" ? 1 : 3),
+                    birthday = d.Uibirthday.ToString(),
+                    role = d.Uiu.UroleAid,
+                    roleName = d.Uiu.Attributes.FirstOrDefault().Aname,
+                    position = d.Uiu.UdesignationAid,
+                    iclass = d.Uiu.Ucid,
+                    state = d.Uiu.Ustate == 1 ? "正常" : "禁用",
+                }).ToList();
                 object data = new
                 {
-                    dataList,
+                    dataList=iq,
                     count = total
                 };
                 return GetResult(Actions.query, 0, data: data);

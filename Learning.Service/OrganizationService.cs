@@ -61,6 +61,16 @@ namespace Learning.Service
             var iq = _organizationICO._baseOrganizationService.QueryAll(d => d.OcreateTime, true, out total, page, limit,d=>d.OparentOid==null).Include(s=>s.OrganizationRelations).ToList();
             iq.ForEach(d =>
             {
+                var der = d.Oprincipal.Split(",");
+                var da = _organizationICO._baseAttributesService.QueryAll(a => der.Contains(a.Aid)).Select(s => new
+                {
+                    s.Aname
+                }).ToList();
+                var principal = "";
+                da.ForEach(d =>
+                {
+                    principal += d.Aname + ",";
+                });
                 list.Add(new
                 {
                     id = d.Oid,
@@ -69,8 +79,8 @@ namespace Learning.Service
                     grade = d.Olv,
                     number = d.Ono,
                     parentId = d.OparentOid,
-                    principal = d.Oprincipal,
-                    staff=d.OrganizationRelations.Count(),
+                    principal = principal,
+                    staff =d.OrganizationRelations.Count(),
                     state = d.Ostate,
                     remark = d.Odesc,
                     children = getOrganizationByListBase(d.Oid)
@@ -112,13 +122,17 @@ namespace Learning.Service
 
         public object getOrganizationByAdd(dept data)
         {
+            var principal = "";
+            data.principal.ForEach(d=> {
+                principal+=d+",";
+            });
             Organization list = new Organization() {
                 Oid = Config.GUID(),
                 Oname=data.name,
                 Oexplain=data.explain,
                 Olv=data.grade,
                 OparentOid=data.parentId == "" ? null : data.parentId,
-                Oprincipal=data.principal,
+                Oprincipal= principal,
                 OcreateTime=DateTime.Now,
                 Ono=data.number,
                 Ostate=1,

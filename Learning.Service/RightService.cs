@@ -140,40 +140,33 @@ namespace Learning.Service
         /// <returns></returns>
         public object getRightByUid(string uid)
         {
-            //List<object> menuAll = new List<object>();
-            //var desc = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid==null&&d.Rstate == 1 && d.RisDel == 0).ToList();
-            //desc.ForEach(d =>
-            //{
-            //    menuAll.Add(new
-            //    {
-            //        id = d.Rid,
-            //        name = d.Rname,
-            //        children = GetIsRightsByAllChildren(d.Rid)
-            //    });
-            //});
-            //根据用户ID获取所有的权限
-            var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();
-            //获取拥有的一级权限
-            var list = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => RRRID.Contains(d.Rid) && d.RprentRid == null).ToList();
-            //定义一个集合将数据返回出去
+            var ue = _rightIOC._baseUserService.QueryAll(d => d.Uid.Contains(uid)).Select(d => d.UroleAid).FirstOrDefault();
+            var config = _rightIOC._baseRightConfigService.QueryAll(d => d.Rcaid == ue && (d.Rcstate == 1 && d.RcisDel == 0)).Select(d=>d.Rcid).FirstOrDefault();
+            var configDateild = _rightIOC._baseRightConfigDetails.QueryAll(d => d.Rcdrcid.Contains(config)).Select(d => d.Rcrid).ToList();
             List<TreeData> dataList = new List<TreeData>();
+            var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();
+            RRRID.AddRange(configDateild);
+            HashSet<string> hs = new HashSet<string>(RRRID);
+            //获取拥有的一级权限
+            var list = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => hs.Contains(d.Rid)& d.RprentRid == null).ToList();
             list.ForEach(d =>
             {
+                configDateild.Contains(d.Rid);
                 TreeData treeData = new TreeData()
                 {
                     id = d.Rid,
                     name = d.Rname,
                     path = d.Rurl,
                     icon = d.Ricon,
-                    children = GetRIghtsByUidOnAll(d.Rid,uid)
+                    children = GetRIghtsByUidOnAll(d.Rid, uid, configDateild)
                 };
                 dataList.Add(treeData);
             });
             return GetResult(Actions.query,0,data: dataList);
         }
-        public List<TreeData> GetRIghtsByUidOnAll(string rid, string uid) {
-            var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();
-            var iq = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid.Contains(rid)&&RRRID.Contains(d.Rid)).Include(d=>d.RightsRelations).ToList();
+        public List<TreeData> GetRIghtsByUidOnAll(string rid, string uid,List<string> configDateild) {
+            var RRRID = _rightIOC._baseRightRelationService.QueryAll(d => d.Rruid == uid).Select(d => d.Rrrid).ToList();//用户子级数据
+            var iq = _rightIOC._baseRightService.QueryAll(d => d.Rno, true, d => d.RprentRid.Contains(rid)&& (RRRID.Contains(d.Rid) || configDateild.Contains(d.Rid))).Include(d=>d.RightsRelations).ToList();
             List<TreeData> treeDatas = new List<TreeData>();
             iq.ForEach(d =>
             {
@@ -185,7 +178,7 @@ namespace Learning.Service
                     icon = d.Ricon,
                     alias = d.Rexplain,
                     number = (int)d.Rno,
-                    children = GetRIghtsByUidOnAll(d.Rid,uid)
+                    children = GetRIghtsByUidOnAll(d.Rid,uid, configDateild)
                 });
             });
             return treeDatas;
@@ -444,7 +437,7 @@ namespace Learning.Service
                     name = d.Rname,
                     path = d.Rurl,
                     icon = d.Ricon,
-                    children = GetRIghtsByUidOnAll(d.Rid, uid)
+                    children = GetRIghtsByUidOnAll(d.Rid, uid,null)
                 };
                 dataList.Add(treeData);
             });

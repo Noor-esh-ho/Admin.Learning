@@ -11,6 +11,6 @@ namespace Learning.Api_Admin.Models
 
         public string name{ get; set; }
 
-        public string[] sort{ get; set; }
+        public string[] arrid { get; set; }
     }
 }

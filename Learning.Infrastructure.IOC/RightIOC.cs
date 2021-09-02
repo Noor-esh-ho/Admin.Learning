@@ -18,13 +18,15 @@ namespace Learning.Infrastructure.IOC
         public readonly BaseRightConfigService _baseRightConfigService;
         public readonly BaseRightConfigDetailsService _baseRightConfigDetails;
         public readonly BaseAttributesService _baseAttributesService;
+        public readonly BaseUserService _baseUserService;
 
-        public RightIOC(BaseAttributesService baseAttributesService,BaseRightService baseRightService,BaseRightRelationService baseRightRelationService,BaseRightConfigService baseRightConfigService,BaseRightConfigDetailsService baseRightConfigDetailsService) {
+        public RightIOC(BaseAttributesService baseAttributesService,BaseRightService baseRightService,BaseRightRelationService baseRightRelationService,BaseRightConfigService baseRightConfigService,BaseRightConfigDetailsService baseRightConfigDetailsService,BaseUserService baseUserService) {
             _baseRightService = baseRightService;
             _baseRightRelationService = baseRightRelationService;
             _baseRightConfigService = baseRightConfigService;
             _baseRightConfigDetails = baseRightConfigDetailsService;
             _baseAttributesService = baseAttributesService;
+            _baseUserService = baseUserService;
         }
     }
 }

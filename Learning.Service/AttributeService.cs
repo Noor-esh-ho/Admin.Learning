@@ -104,6 +104,15 @@ namespace Learning.Service
             return GetResult( Actions.query,0,data:iq);
         }
 
+        public object getAttributeOnJobtitle()
+        {
+            var iq = _attributeIOC._baseAttributesService.QueryAll(d => d.Aatid == _Configuration["Attribute:part"] && (d.Astate == 1 && d.AisDel == 0)).Select(d => new {
+                id = d.Aid,
+                title = d.Aname,
+            }).ToList();
+            return GetResult(Actions.query, 0, data: iq);
+        }
+
         public object getAttributeOnPost()
         {
             var iq = _attributeIOC._baseAttributesService.QueryAll(d => d.Aatid == _Configuration["Attribute:post"] && (d.Astate == 1 && d.AisDel == 0)).Select(d => new {

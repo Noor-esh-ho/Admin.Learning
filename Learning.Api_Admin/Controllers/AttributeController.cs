@@ -30,6 +30,16 @@ namespace Learning.Api_Admin.Controllers
             var reuslt = _attributesService.getAttributeOnRole();
             return Ok(reuslt);
         }
+        /// <summary>
+        /// 获取职务信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult getAttributeOnJobtitle()
+        {
+            var reuslt = _attributesService.getAttributeOnJobtitle();
+            return Ok(reuslt);
+        }
         [HttpGet]
         public IActionResult getAttributeOnPost()
         {

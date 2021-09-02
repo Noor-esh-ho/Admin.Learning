@@ -27,7 +27,7 @@ namespace Learning.Infrastructure.Dto.Base
         /// <summary>
         /// 负责人
         /// </summary>
-        public string principal { get; set; }
+        public List<string> principal { get; set; }
         /// <summary>
         /// 排序
         /// </summary>

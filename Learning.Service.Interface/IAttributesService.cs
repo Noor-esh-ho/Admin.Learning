@@ -20,5 +20,6 @@ namespace Learning.Service.Interface
         object getAttributeByAdd(string name, string value1, string value2, string atid, int sort, string desc, string uid);
         object getAttributeByOperate(string id, int state);
         object getAttributeByUpdate(string id,string name, string value1, string value2, int sort, string desc);
+        object getAttributeOnJobtitle();
     }
 }

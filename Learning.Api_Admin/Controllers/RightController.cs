@@ -82,7 +82,7 @@ namespace Learning.Api_Admin.Controllers
         }
         [HttpPost]
         public IActionResult getRightConfigByAdd(Rightconfig data) {
-            var result = _rightService.getRightConfigByAdd(name:data.name,role:data.roleid, arrid:data.sort);
+            var result = _rightService.getRightConfigByAdd(name:data.name,role:data.roleid, arrid:data.arrid);
             return Ok(result);
         }
         [HttpPost]
